@@ -21,6 +21,8 @@ export const AddTask = ({ taskList, setTaskList, task, setTask }) => {
           placeholder="add Task"
           autoComplete="off"
           maxLength="25"
+          // accesing the value of the element to be edited
+          value={task.name}
         />
         <button type="submit">Add Task</button>
       </form>
