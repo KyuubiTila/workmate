@@ -1,16 +1,31 @@
 export const AddTask = ({ taskList, setTaskList, task, setTask }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    const date = new Date();
-    // console.log(e.target.task.value);
-    // console.log(date.getTime);
-    const newTask = {
-      id: date.getTime(),
-      name: e.target.task.value,
-      time: `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`,
-    };
-    setTaskList([...taskList, newTask]);
-    e.target.task.value = '';
+    if (task.id) {
+      const date = new Date();
+      const updatedTaskList = taskList.map((todo) =>
+        todo.id === task.id
+          ? {
+              id: task.id,
+              name: task.name,
+              time: `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`,
+            }
+          : todo
+      );
+      setTaskList(updatedTaskList);
+      setTask({});
+    } else {
+      const date = new Date();
+      // console.log(e.target.task.value);
+      // console.log(date.getTime);
+      const newTask = {
+        id: date.getTime(),
+        name: e.target.task.value,
+        time: `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`,
+      };
+      setTaskList([...taskList, newTask]);
+      setTask({});
+    }
   };
   return (
     <section className="addTask">
@@ -22,9 +37,10 @@ export const AddTask = ({ taskList, setTaskList, task, setTask }) => {
           autoComplete="off"
           maxLength="25"
           // accesing the value of the element to be edited
-          value={task.name}
+          value={task.name || ''}
+          onChange={(e) => setTask({ ...task, name: e.target.value })}
         />
-        <button type="submit">Add Task</button>
+        <button type="submit">{task.id ? 'Update' : 'Add'}</button>
       </form>
     </section>
   );
